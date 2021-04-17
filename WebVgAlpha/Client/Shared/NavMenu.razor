@@ -1,0 +1,72 @@
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">Web Vg</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="material-icons nav-icon">
+                    home
+                </span> Home
+            </NavLink>
+        </li>
+        <li class="nav-item px-3"  style=" color: #d7d7d7;">
+            <NavLink class="nav-link" @onclick="() => expandSubNav = !expandSubNav">
+                <span class="material-icons nav-icon">
+                    sticky_note_2
+                </span> Propostas
+                <span class="material-icons">
+                    expand_more
+                </span>
+            </NavLink>
+            @if (expandSubNav)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="proposalList">
+                            <span class="material-icons nav-icon">
+                                description
+                            </span> Ver Propostas
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="newProposal">
+                            <span class="material-icons nav-icon">
+                                note_add
+                            </span> Nova Proposta
+                        </NavLink>
+                    </li>
+                </ul>
+            }
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="counter">
+                <span class="oi oi-plus" aria-hidden="true"></span> Counter
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="fetchdata">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+            </NavLink>
+        </li>
+    </ul>
+</div>
+
+@code {
+
+    private bool expandSubNav;
+
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+}

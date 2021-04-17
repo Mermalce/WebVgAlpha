@@ -1,0 +1,22 @@
+﻿@page "/proposalList"
+
+<div class="row">
+    <div class="col">
+        <h2 style="text-align: center;">Lista de Propostas</h2>
+        <br />
+        <RadzenGrid AllowFiltering="true" AllowPaging="true" PageSize="3" AllowSorting="true" TItem="string">
+            <Columns>
+                <RadzenGridColumn TItem="string" Title="Número" />
+                <RadzenGridColumn TItem="string" Title="Tipo" />
+                <RadzenGridColumn TItem="string" Title="Cliente" />
+                <RadzenGridColumn TItem="string" Title="Data" />
+                <RadzenGridColumn TItem="string" Title="Feita por" />
+            </Columns>
+        </RadzenGrid>
+    </div>
+</div>
+
+
+@code {
+
+}

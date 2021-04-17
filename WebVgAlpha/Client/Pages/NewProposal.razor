@@ -1,0 +1,583 @@
+﻿@page "/newProposal"
+@inject IToastService toastService
+
+
+<div class="row">
+    <div class="col">
+        <h2>Criar Proposta</h2>
+    </div>
+
+    <RadzenProgressBar @bind-Value="@progressBarVal" Style="width: 100%; margin-bottom: 20px;" />
+</div>
+
+<div class="row">
+    <RadzenSteps Change=@CheckFields Style="width: 99%; text-align: center;">
+        <Steps>
+            <RadzenStepsItem Text="Dados da Proposta">
+                <br />
+                <br />
+                <div class="row">
+                    <!--Tipo Proposta-->
+                    <div class="col-md-3">
+                        <p class="text-title">Tipo de Proposta: </p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenDropDown TValue="string" Data="@tipoProp" @bind-Value="@selTipoProp" />
+                    </div>
+                    <!--Numero Proposta-->
+                    <div class="col-md-3">
+                        <p class="text-title">Número da Proposta:</p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenTextBox @bind-Value="@numProp" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <!--Nome Proposta-->
+                    <div class="col-md-3">
+                        <p class="text-title">Nome do Ficheiro:</p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenTextBox @bind-Value="@nomeProp" />
+                    </div>
+                    <!--Nome Proposta-->
+                    <div class="col-md-3">
+                        <p class="text-title">Data:</p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenTextBox @bind-Value="@dataProp" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <RadzenButton Click=@ResetDados Icon="replay_circle_filled" Style="background-color: cornflowerblue;" />
+                </div>
+                <br />
+                <div class="row">
+                    <!--Texto Abertura-->
+                    <div class="col-md-3">
+                        <p class="text-title">Texto de Abertura:</p>
+                    </div>
+                    <div class="col">
+                        <textarea class="form-control" rows="3" @bind="@textoAbertura"></textarea>
+                    </div>
+                </div>
+                <br />
+                <br />
+            </RadzenStepsItem>
+            <!--DADOS CLIENTE-->
+            <RadzenStepsItem Text="Dados do Cliente">
+                <br />
+                <br />
+                <div class="row">
+                    <!--Nome Cliente-->
+                    <div class="col-md-3">
+                        <p class="text-title">Nome do Cliente:</p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenTextBox @bind-Value="@nomeCliente" />
+                    </div>
+                    <!--Numero Cliente-->
+                    <div class="col-md-3">
+                        <p class="text-title">Número do Cliente:</p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenTextBox @bind-Value="@numCliente" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!--Contacto Cliente-->
+                    <div class="col-md-3">
+                        <p class="text-title">Contacto:</p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenTextBox @bind-Value="@contCliente" />
+                    </div>
+                    <!--Email Cliente-->
+                    <div class="col-md-3">
+                        <p class="text-title">E-mail:</p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenTextBox @bind-Value="@mailCliente" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!--Morada Cliente-->
+                    <div class="col-md-3">
+                        <p class="text-title">Morada:</p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenTextBox @bind-Value="@moradaCliente" />
+                    </div>
+                    <!--NIF Cliente-->
+                    <div class="col-md-3">
+                        <p class="text-title">NIF:</p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenTextBox @bind-Value="@nifCliente" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <h3>Escolher Logo do Cliente</h3>
+                        <RadzenFileInput @bind-Value=@logoPath Style="width:400px" TValue="string" />
+                    </div>
+                </div>
+
+                <br />
+                <hr />
+                <RadzenGrid AllowFiltering="true" AllowPaging="true" PageSize="3" AllowSorting="true" TItem="string">
+                    <Columns>
+                        <RadzenGridColumn TItem="string" Title="Nº Cliente" />
+                        <RadzenGridColumn TItem="string" Title="Nome" />
+                        <RadzenGridColumn TItem="string" Title="Morada" />
+                        <RadzenGridColumn TItem="string" Title="Cod. Postal" />
+                        <RadzenGridColumn TItem="string" Title="Telefone" />
+                        <RadzenGridColumn TItem="string" Title="Email" />
+                        <RadzenGridColumn TItem="string" Title="Nº Contribuinte" />
+                    </Columns>
+                </RadzenGrid>
+            </RadzenStepsItem>
+            <!--DADOS PISCINA-->
+            <RadzenStepsItem Text="Dados da Piscina">
+                <br />
+                <br />
+                <div class="row">
+                    <!--Formato Piscina-->
+                    <div class="col-md-3">
+                        <p class="text-title">Formato da Piscina: </p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenDropDown TValue="string" Data="@formatoPiscina" @bind-Value="@selFormatoPiscina" Change=@FormatoPiscinaChange />
+                    </div>
+                </div>
+                <div class="row">
+                    <!--Comprimento-->
+                    <div class="col-md-3">
+                        <p class="text-title">Comprimento: </p>
+                    </div>
+                    <div class="col-md-1 input-field">
+                        <RadzenNumeric ShowUpDown="false" Change="@CalcDimensoes" TValue="double" @bind-Value="@tboxComp" />
+                    </div>
+                    <div class="col-sm-1 unit">
+                        <p>m</p>
+                    </div>
+                    <!--Superficie-->
+                    <div class="col-md-3">
+                        <p class="text-title">Superfície:</p>
+                    </div>
+                    <div class="col-md-1 input-field">
+                        <RadzenNumeric ShowUpDown="false" TValue="double" Disabled="@boolFormato" @bind-Value="@tboxSuperf" />
+                    </div>
+                    <div class="col-sm-1 unit">
+                        <p>m<sup>2</sup></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--Largura-->
+                    <div class="col-md-3">
+                        <p class="text-title">Largura: </p>
+                    </div>
+                    <div class="col-md-1 input-field">
+                        <RadzenNumeric ShowUpDown="false" Change="@CalcDimensoes" TValue="double" @bind-Value="@tboxLarg" />
+                    </div>
+                    <div class="col-sm-1 unit">
+                        <p>m</p>
+                    </div>
+                    <!--Volume-->
+                    <div class="col-md-3">
+                        <p class="text-title">Volume:</p>
+                    </div>
+                    <div class="col-md-1 input-field">
+                        <RadzenNumeric ShowUpDown="false" TValue="double" Disabled="@boolFormato" @bind-Value=@tboxVol />
+                    </div>
+                    <div class="col-sm-1 unit">
+                        <p>m<sup>3</sup></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--Prof Min-->
+                    <div class="col-md-3">
+                        <p class="text-title">Profundidade Mínima: </p>
+                    </div>
+                    <div class="col-md-1 input-field">
+                        <RadzenNumeric ShowUpDown="false" Change="@CalcDimensoes" TValue="double" @bind-Value=@tboxProfMin />
+                    </div>
+                    <div class="col-sm-1 unit">
+                        <p>m</p>
+                    </div>
+                    <!--Área-->
+                    <div class="col-md-3">
+                        <p class="text-title">Área:</p>
+                    </div>
+                    <div class="col-md-1 input-field">
+                        <RadzenNumeric ShowUpDown="false" TValue="double" Disabled="@boolFormato" @bind-Value=@tboxArea />
+                    </div>
+                    <div class="col-sm-1 unit">
+                        <p>m<sup>2</sup></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--Prof Max-->
+                    <div class="col-md-3">
+                        <p class="text-title">Profundidade Máxima: </p>
+                    </div>
+                    <div class="col-md-1 input-field">
+                        <RadzenNumeric ShowUpDown="false" Change="@CalcDimensoes" TValue="double" @bind-Value=@tboxProfMax />
+                    </div>
+                    <div class="col-sm-1 unit">
+                        <p>m</p>
+                    </div>
+                    <!--Perímetro-->
+                    <div class="col-md-3">
+                        <p class="text-title">Perímetro:</p>
+                    </div>
+                    <div class="col-md-1 input-field">
+                        <RadzenNumeric ShowUpDown="false" TValue="double" Disabled="@boolFormato" @bind-Value=@tboxPeri />
+                    </div>
+                    <div class="col-sm-1 unit">
+                        <p>m</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--Prof Med-->
+                    <div class="col-md-3">
+                        <p class="text-title">Profundidade Média: </p>
+                    </div>
+                    <div class="col-md-1 input-field">
+                        <RadzenNumeric ShowUpDown="false" TValue="double" Disabled="@boolFormato" @bind-Value=@tboxProfMed />
+                    </div>
+                    <div class="col-sm-1 unit">
+                        <p>m</p>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <!--Construção-->
+                    <div class="col-md-3">
+                        <p class="text-title">Tipo de Construção: </p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenDropDown TValue="string" Data="@dadosTipo" @bind-Value="@selConstrucao" />
+                    </div>
+                    <!--Circulação-->
+                    <div class="col-md-3">
+                        <p class="text-title">Tipo de Circulação: </p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenDropDown TValue="string" Data="@dadosTipo" @bind-Value="@selCirculacao" />
+                    </div>
+                </div>
+                <div class="row">
+                    <!--Escadas-->
+                    <div class="col-md-3">
+                        <p class="text-title">Escadas: </p>
+                    </div>
+                    <div class="col-md-1 input-field">
+                        <RadzenNumeric TValue="int" Min="0" Change="@numEscadasChange" @bind-Value="@numEscadas" />
+                    </div>
+                    <div class="col-md-2">
+                        <p class="text-title">Tipo de Escadas: </p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenDropDown TValue="string" Disabled="@tipoEscadasSel" Data="@dadosTipo" @bind-Value="@selEscada" />
+                    </div>
+                </div>
+                <div class="row">
+                    <!--Morada Instalção-->
+                    <div class="col-md-3">
+                        <p class="text-title">Morada de Instalação: </p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenDropDown TValue="string" Data="@moradaInst" @bind-Value="@selMoradaInst" />
+                    </div>
+                </div>
+                <div class="row">
+                    <!--Morada Instalção Manual-->
+                    <div class="col-md-3"></div>
+                    <div class="col input-field">
+                        <RadzenTextBox @bind-Value="@tboxMoradaInstM" />
+                    </div>
+                    <!--Coordenadas-->
+                    <div class="col-md-3">
+                        <p class="text-title">Coordenadas: </p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenTextBox @bind-Value="@tboxCoord" />
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <!--Escavação-->
+                    <div class="col-md-3">
+                        <p class="text-title">Escavação: </p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenDropDown TValue="string" Data="@clienteOuVg" @bind-Value="@selEscavacao" />
+                    </div>
+                    <!--Estrutura-->
+                    <div class="col-md-3">
+                        <p class="text-title">Estrutura: </p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenDropDown TValue="string" Data="@clienteOuVg" @bind-Value="@selEstrutura" />
+                    </div>
+                </div>
+                <div class="row">
+                    <!--Revestimento-->
+                    <div class="col-md-3">
+                        <p class="text-title">Revestimento: </p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenDropDown TValue="string" Data="@clienteOuVg" @bind-Value="@selRevestimento" />
+                    </div>
+                    <!--Casa de Maquinas-->
+                    <div class="col-md-3">
+                        <p class="text-title">Casa de Máquinas: </p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenDropDown TValue="string" Data="@clienteOuVg" @bind-Value="@selcMaquina" />
+                    </div>
+                </div>
+                <div class="row">
+                    <!--Tanque de Compensação-->
+                    <div class="col-md-3">
+                        <p class="text-title">Tanque de Compensação: </p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenDropDown TValue="string" Data="@clienteOuVg" @bind-Value="@seltCompensacao" />
+                    </div>
+                    <!--Ligação á Rede-->
+                    <div class="col-md-3">
+                        <p class="text-title">Ligação á Rede: </p>
+                    </div>
+                    <div class="col input-field">
+                        <RadzenDropDown TValue="string" Data="@clienteOuVg" @bind-Value="@sellRede" />
+                    </div>
+                </div>
+                <br />
+                <br />
+            </RadzenStepsItem>
+            <!--EQUIPAMENTO-->
+            <RadzenStepsItem Text="Equipamento">
+                ...
+            </RadzenStepsItem>
+            <!--EXPORTAR-->
+            <RadzenStepsItem Text="Exportar">
+                <br />
+                <br />
+                <h1>Informação da Proposta</h1>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <RadzenButton Text="Exportar" Icon="print" Style="margin-bottom: 20px; width: 150px; background-color: cornflowerblue;" />
+
+            </RadzenStepsItem>
+        </Steps>
+    </RadzenSteps>
+</div>
+<br />
+<br />
+
+@code {
+    public double progressBarVal = 0;
+
+    // DADOS PROPOSTTA
+    #region DADOS PROPOSTA
+
+    public string[] tipoProp = { "Pisicna Completa", "Renovação", "Tipo 3", "Tipo 4" };
+
+    static string codProp = DateTime.Now.ToString("dd/MM/yy").Replace(@"/", "") + DateTime.Now.ToString("HH:mm").Replace(@":", "");
+
+    static string numProp = codProp;
+    static string nomeProp = codProp;
+    static string dataProp = DateTime.Now.ToString("dd/MM/yy");
+    static string textoAbertura;
+    static string selTipoProp;
+
+    void ResetDados()
+    {
+        numProp = codProp;
+        nomeProp = codProp;
+        dataProp = DateTime.Now.ToString("dd/MM/yy");
+    }
+
+    void CheckFields(int index)
+    {
+        //Check Dados Prop
+        if (index == 1)
+        {
+            switch (index)
+            {
+                case 1:
+                    if (string.IsNullOrEmpty(selTipoProp))
+                    {
+                        toastService.ShowWarning("Tipo da proposta por preencher", "ATENÇÃO!");
+                    }
+                    else if (string.IsNullOrEmpty(numProp))
+                    {
+                        toastService.ShowWarning("Número da proposta por preencher", "ATENÇÃO!");
+                    }
+                    else if (string.IsNullOrEmpty(nomeProp))
+                    {
+                        toastService.ShowWarning("Nome do Ficheiro por preencher", "ATENÇÃO!");
+                    }
+                    else if (string.IsNullOrEmpty(dataProp))
+                    {
+                        toastService.ShowWarning("Data da proposta por preencher", "ATENÇÃO!");
+                    }
+                    else if (string.IsNullOrEmpty(textoAbertura))
+                    {
+                        toastService.ShowWarning("Texto de Abertura por preencher", "ATENÇÃO!");
+                    }
+                    break;
+                case 2:
+                    Console.WriteLine("Case 2");
+                    break;
+                default:
+                    Console.WriteLine("Default case");
+                    break;
+            }
+        }
+
+    }
+
+    #endregion
+
+    // DADOS CLIENTE
+    #region DADOS CLIENTE
+
+    static string nomeCliente;
+    static string numCliente;
+    static string contCliente;
+    static string mailCliente;
+    static string moradaCliente;
+    static string nifCliente;
+    static string logoPath;
+
+    #endregion
+
+    // DADOS PISCINA
+    #region DADOS PISCINA
+
+    public string[] formatoPiscina = { "Rectangular", "Forma Livre" };
+    public string[] tipoConstrucao = { "Tipo 1", "Tipo 2" };
+    public string[] tipoEscadas = { "Tipo 1", "Tipo 2" };
+    public string[] tipoCirculacao = { "Tipo 1", "Tipo 2" };
+    public string[] dadosTipo = { "Tipo 1", "Tipo 2", "Tipo 3", "Tipo 4" };
+    public string[] moradaInst = { "Outra" };
+    public string[] clienteOuVg = { "A cargo do CLIENTE", "A cargo da VG", "Não está Previsto" };
+
+    static string selFormatoPiscina = "Rectangular";
+    static string selConstrucao;
+    static string selEscada;
+    static string selCirculacao;
+    static string selMoradaInst;
+    static string selEscavacao = "A cargo do CLIENTE";
+    static string selEstrutura = "A cargo do CLIENTE";
+    static string selRevestimento = "A cargo do CLIENTE";
+    static string selcMaquina = "A cargo do CLIENTE";
+    static string seltCompensacao = "A cargo do CLIENTE";
+    static string sellRede = "A cargo do CLIENTE";
+    static string tboxMoradaInstM;
+    static string tboxCoord;
+
+    static double tboxComp;
+    static double tboxSuperf;
+    static double tboxLarg;
+    static double tboxVol;
+    static double tboxProfMin;
+    static double tboxArea;
+    static double tboxProfMax;
+    static double tboxPeri;
+    static double tboxProfMed;
+    static int numEscadas;
+    bool tipoEscadasSel = true;
+
+    bool boolFormato = true;
+
+
+    void FormatoPiscinaChange()
+    {
+        if (selFormatoPiscina == "Forma Livre")
+        {
+            boolFormato = false;
+        }
+        else
+        {
+            boolFormato = true;
+        }
+
+        tboxComp = 0;
+        tboxSuperf = 0;
+        tboxLarg = 0;
+        tboxVol = 0;
+        tboxProfMin = 0;
+        tboxArea = 0;
+        tboxProfMax = 0;
+        tboxPeri = 0;
+        tboxProfMed = 0;
+    }
+
+    void CalcDimensoes()
+    {
+        try
+        {
+            if (selFormatoPiscina == "Rectangular")
+            {
+                double profMed = (tboxProfMin + tboxProfMax) / 2;
+
+                double superficie = tboxComp * tboxLarg;
+
+                double volume = tboxComp * tboxLarg * tboxProfMed;
+
+                double area = ((tboxComp * tboxProfMed * 2) + (tboxLarg * tboxProfMed * 2) + tboxSuperf);
+
+                double perimetro = (tboxComp + tboxLarg) * 2;
+
+                tboxProfMed = Math.Round(profMed, 2);
+                tboxSuperf = Math.Round(superficie, 2);
+                tboxVol = Math.Round(volume, 2);
+                tboxArea = Math.Round(area, 2);
+                tboxPeri = Math.Round(perimetro, 2);
+            }
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    void numEscadasChange()
+    {
+        if (numEscadas == 0)
+        {
+            tipoEscadasSel = true;
+        } else
+        {
+            tipoEscadasSel = false;
+        }
+    }
+
+    #endregion
+
+    //EQUIPAMENTO
+    #region EQUIPAMENTO
+
+    #endregion
+
+    //EXPORTAR
+    #region EXPORTAR
+
+
+    #endregion
+
+}

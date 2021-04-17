@@ -1,0 +1,67 @@
+﻿@page "/"
+
+<h1>Bem vindo, "User"!</h1>
+
+<br />
+
+<div class="row">
+    <div class="col">
+        <h2 style="text-align: center;">Lista de Tarefas</h2>
+        <br />
+        <RadzenGrid AllowFiltering="true" AllowPaging="true" PageSize="3" AllowSorting="true" TItem="string">
+            <Columns>
+                <RadzenGridColumn TItem="string" Title="Tipo" />
+                <RadzenGridColumn TItem="string" Title="Encarregue" />
+                <RadzenGridColumn TItem="string" Title="Descrição" />
+                <RadzenGridColumn TItem="string" Title="Data" />
+                <RadzenGridColumn TItem="string" Title="Estado" />
+            </Columns>
+        </RadzenGrid>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-6 col-sm-12 p-4">
+        <h2 style="text-align: center;">Tipos de Proposta</h2>
+        <RadzenChart>
+            <RadzenPieSeries Data="@revenue" Title="Tipo de Proposta" CategoryProperty="TipoProp" ValueProperty="NumTipoProp" />
+        </RadzenChart>
+    </div>
+</div>
+
+@code{
+
+    class TipoProposta
+    {
+        public string TipoProp { get; set; }
+        public double NumTipoProp { get; set; }
+    }
+
+    TipoProposta[] revenue = new TipoProposta[] {
+        new TipoProposta
+        {
+            TipoProp = "Piscina Completa",
+            NumTipoProp = 40
+        },
+        new TipoProposta
+        {
+            TipoProp = "Renovação de Piscina",
+            NumTipoProp = 65
+        },
+        new TipoProposta
+        {
+            TipoProp = "Tipo 3",
+            NumTipoProp = 20
+        },
+        new TipoProposta
+        {
+            TipoProp = "Tipo 4",
+            NumTipoProp = 15
+        },
+    };
+
+
+
+}
